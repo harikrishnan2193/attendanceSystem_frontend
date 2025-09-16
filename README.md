@@ -182,19 +182,8 @@ ng build --prod
 
 ## Screenshots
 
-Example images (add your own screenshots in `docs/screenshots/` folder):
-
 Dashboard
 ![Dashboard Screenshot](docs/screenshots/dashboard.png)
-
-Leave Management
-![Leave Management Screenshot](docs/screenshots/leave-management.png)
-
-Attendance History
-![Attendance History Screenshot](docs/screenshots/attendance-history.png)
-
-Mobile View
-![Mobile View Screenshot](docs/screenshots/mobile-view.png)
 
 ---
 
@@ -213,5 +202,3 @@ Mobile View
 Built using **Angular 18+** and **modern web technologies**
 
 ```
-
----
