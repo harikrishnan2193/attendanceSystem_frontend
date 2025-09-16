@@ -1,0 +1,51 @@
+<div class="content-padding">
+  <div class="card shadow-sm p-4 rounded-3 mb-4">
+    <h4 class="mb-3 fw-bold">Leave Request</h4>
+    <form (ngSubmit)="onSubmitLeave()">
+      <!-- start date -->
+      <div class="mb-3">
+        <label for="startDate" class="form-label fw-semibold">Start Date</label>
+        <input
+          type="date"
+          class="form-control"
+          id="startDate"
+          [(ngModel)]="leaveData.startDate"
+          name="startDate"
+          required
+        />
+      </div>
+
+      <!-- end date -->
+      <div class="mb-3">
+        <label for="endDate" class="form-label fw-semibold"
+          >End Date <small class="text-muted">(select same day for single-day leave)</small></label
+        >
+        <input
+          type="date"
+          class="form-control"
+          id="endDate"
+          [(ngModel)]="leaveData.endDate"
+          name="endDate"
+          required
+        />
+      </div>
+
+      <!-- reason for leave -->
+      <div class="mb-3">
+        <label for="leaveReason" class="form-label fw-semibold">Reason for Leave</label>
+        <textarea
+          class="form-control"
+          id="leaveReason"
+          rows="3"
+          placeholder="Enter your reason..."
+          [(ngModel)]="leaveData.reason"
+          name="reason"
+          required
+        ></textarea>
+      </div>
+
+      <!-- submit button -->
+      <button type="submit" class="btn btn-primary w-100">Submit Leave</button>
+    </form>
+  </div>
+</div>

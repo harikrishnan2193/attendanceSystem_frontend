@@ -1,0 +1,64 @@
+<div class="content-padding">
+  <div class="content">
+    <h4 class="mb-3 fw-bold">{{ isAdmin ? 'Leave Management' : 'Notifications' }}</h4>
+
+    <!-- leave requests section - for admin -->
+    <div *ngIf="isAdmin" class="section-card mb-4">
+      <div class="section-header">
+        <h5 class="section-title">Leave Requests</h5>
+        <select [(ngModel)]="selectedStatus" class="form-select status-dropdown">
+          <option value="PENDING">Pending</option>
+          <option value="APPROVED">Approved</option>
+          <option value="REJECTED">Rejected</option>
+        </select>
+      </div>
+
+      <div class="leave-requests">
+        <div *ngFor="let request of filteredLeaveRequests; trackBy: trackByFn" class="leave-card">
+          <div class="leave-info">
+            <h6>{{ request.name }}</h6>
+            <p class="mb-1">
+              {{ request.reason }} • {{ request.start_date | date : 'mediumDate' }} to
+              {{ request.end_date | date : 'mediumDate' }}
+            </p>
+            <small class="text-muted">{{ request.email }}</small>
+          </div>
+          <div class="leave-actions">
+            <select
+              [value]="request.status"
+              (change)="updateLeaveStatus(request, $any($event.target).value)"
+              class="form-select form-select-sm status-select"
+            >
+              <option value="PENDING">Pending</option>
+              <option value="APPROVED">Approved</option>
+              <option value="REJECTED">Rejected</option>
+            </select>
+          </div>
+        </div>
+
+        <div *ngIf="filteredLeaveRequests.length === 0" class="no-data">
+          No {{ selectedStatus.toLowerCase() }} leave requests
+        </div>
+      </div>
+    </div>
+
+    <!-- notifications section - for employee -->
+    <div *ngIf="!isAdmin" class="section-card">
+      <h5 class="section-title">Notifications</h5>
+
+      <div class="notifications-list">
+        <div
+          *ngFor="let notification of notifications; trackBy: trackByFn"
+          class="notification-item"
+        >
+          <div class="notification-content">
+            <p class="mb-1">{{ notification.message }}</p>
+            <small>{{ notification.timestamp | date : 'medium' }}</small>
+          </div>
+        </div>
+
+        <div *ngIf="notifications.length === 0" class="no-data">No notifications available</div>
+      </div>
+    </div>
+  </div>
+</div>

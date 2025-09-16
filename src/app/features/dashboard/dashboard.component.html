@@ -1,0 +1,101 @@
+<div class="content-padding">
+  <div class="content">
+    <div class="row g-4">
+      <!-- left column -->
+      <div class="col-md-6">
+        <div class="row g-4">
+          <!-- check-in/check-out -->
+          <div class="col-12">
+            <div class="card-custom p-4 text-start">
+              <div class="d-flex justify-content-between align-items-center">
+                <div>
+                  <h6 class="mb-2 text-secondary">
+                    {{
+                      attendanceStatus === 'not_checked_in'
+                        ? 'Check-In'
+                        : attendanceStatus === 'checked_in'
+                        ? 'Check-Out'
+                        : 'Day Completed'
+                    }}
+                  </h6>
+                  <p class="mb-1 small text-muted">
+                    {{
+                      attendanceStatus === 'not_checked_in'
+                        ? 'Start your work day'
+                        : attendanceStatus === 'checked_in'
+                        ? 'End your work day'
+                        : 'Your work day is complete'
+                    }}
+                  </p>
+                </div>
+                <button
+                  class="btn btn-sm px-4"
+                  [class.btn-success]="attendanceStatus === 'not_checked_in'"
+                  [class.btn-danger]="attendanceStatus === 'checked_in'"
+                  [class.btn-secondary]="attendanceStatus === 'checked_out'"
+                  [disabled]="attendanceStatus === 'checked_out'"
+                  (click)="onCheckInOut()"
+                >
+                  {{
+                    attendanceStatus === 'not_checked_in'
+                      ? 'Start Work'
+                      : attendanceStatus === 'checked_in'
+                      ? 'End Work'
+                      : 'Day Ended'
+                  }}
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- break -->
+          <div class="col-12">
+            <div class="card-custom p-4 text-start">
+              <div class="d-flex justify-content-between align-items-center">
+                <div>
+                  <h6 class="mb-2 text-secondary">Break</h6>
+                  <p class="mb-1 small text-muted">
+                    {{ breakStatus === 'not_on_break' ? 'Take a short pause' : 'End your break' }}
+                  </p>
+                </div>
+                <button
+                  class="btn btn-sm px-4"
+                  [disabled]="attendanceStatus !== 'checked_in'"
+                  [class.btn-secondary]="attendanceStatus !== 'checked_in'"
+                  [class.btn-warning]="
+                    attendanceStatus === 'checked_in' && breakStatus === 'not_on_break'
+                  "
+                  [class.btn-info]="attendanceStatus === 'checked_in' && breakStatus === 'on_break'"
+                  (click)="onBreakAction()"
+                >
+                  {{ breakStatus === 'not_on_break' ? 'Take a Break' : 'End Break' }}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- right column -->
+      <div class="col-md-6">
+        <div
+          class="card-custom p-5 d-flex flex-column align-items-center justify-content-center h-100"
+        >
+          <h6 class="mb-3 text-secondary">Time Tracker</h6>
+          <h2 id="timer" class="fw-bold text-dark">{{ timerDisplay }}</h2>
+          <p class="text-muted mt-2">
+            {{
+              breakStatus === 'on_break'
+                ? 'On Break'
+                : attendanceStatus === 'checked_in'
+                ? 'You are on duty'
+                : attendanceStatus === 'checked_out'
+                ? 'Day Complete'
+                : 'Not Started'
+            }}
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

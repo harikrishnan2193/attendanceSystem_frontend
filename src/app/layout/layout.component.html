@@ -1,0 +1,23 @@
+<div class="layout-container">
+  <!-- mobile button -->
+  <button class="hamburger-btn" (click)="toggleSidebar()">
+    @if (isSidebarOpen) {
+    <i class="fa-solid fa-times"></i>
+    } @else {
+    <i class="fa-solid fa-bars"></i>
+    }
+  </button>
+
+  <app-sidebar [class.show]="isSidebarOpen" (navClick)="closeSidebar()"></app-sidebar>
+  <div class="main-container">
+    <app-header></app-header>
+    <main class="main-content">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+
+  <!-- mobile overlay -->
+  @if (isSidebarOpen) {
+  <div class="sidebar-overlay" (click)="toggleSidebar()"></div>
+  }
+</div>

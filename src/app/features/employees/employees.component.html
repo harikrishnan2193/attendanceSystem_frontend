@@ -1,0 +1,113 @@
+<div class="content-padding">
+  <div class="header-section">
+    <div>
+      <h2 class="employees-title">View All Employees</h2>
+      <small class="muted">Today's employee status - {{ getCurrentDate() }}</small>
+    </div>
+    <div class="muted">
+      Total employees: <strong>{{ totalEmployees }}</strong>
+    </div>
+  </div>
+
+  <div class="employees-card">
+    @if (employees.length > 0) {
+    <!-- desktop table -->
+    <table class="employees-table">
+      <thead>
+        <tr>
+          <th>Employee Name</th>
+          <th>Email</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let employee of employees">
+          <td class="employee-name">{{ employee.name }}</td>
+          <td class="employee-email">{{ employee.email }}</td>
+          <td>
+            <span [class]="getStatusClass(employee.status)">
+              {{ employee.status }}
+            </span>
+          </td>
+          <td>
+            <button class="remove-btn" (click)="removeEmployee(employee.user_id, employee.name)">
+              Remove
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- mobile cards -->
+    <div class="mobile-cards">
+      <div *ngFor="let employee of employees" class="employee-card">
+        <div class="card-row">
+          <span class="card-label">Name</span>
+          <span class="card-value employee-name">{{ employee.name }}</span>
+        </div>
+        <div class="card-row">
+          <span class="card-label">Email</span>
+          <span class="card-value employee-email">{{ employee.email }}</span>
+        </div>
+        <div class="card-row">
+          <span class="card-label">Status</span>
+          <span [class]="getStatusClass(employee.status)">
+            {{ employee.status }}
+          </span>
+        </div>
+        <div class="card-row">
+          <span class="card-label">Action</span>
+          <button class="remove-btn" (click)="removeEmployee(employee.user_id, employee.name)">
+            Remove
+          </button>
+        </div>
+      </div>
+    </div>
+    } @else {
+    <div class="empty-state">
+      <div class="empty-icon">👥</div>
+      <h3>No Employees Found</h3>
+      <p>No employees are registered in the system yet.</p>
+    </div>
+    }
+
+    <div class="add-employee-section">
+      <button class="btn btn-primary" (click)="getAvailableUsers()">+ Add New Employee</button>
+    </div>
+  </div>
+
+  <!-- modal -->
+  @if (showModal) {
+  <div class="modal-overlay" (click)="closeModal()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h3>Add New Employee</h3>
+        <button class="close-btn" (click)="closeModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="userSelect">Select User</label>
+          <select
+            id="userSelect"
+            class="form-control"
+            [(ngModel)]="selectedUserId"
+            name="selectedUser"
+          >
+            <option value="">-- Select a user --</option>
+            <option *ngFor="let user of availableUsers" [value]="user.user_id">
+              {{ user.name }} ({{ user.email }})
+            </option>
+          </select>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="closeModal()">Cancel</button>
+          <button type="button" class="btn btn-primary" (click)="assignNewEmployee()">
+            Assign Employee
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  }
+</div>

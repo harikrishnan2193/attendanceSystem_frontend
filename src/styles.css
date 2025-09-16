@@ -1,1 +1,54 @@
-/* You can add global styles to this file, and also import other style files */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Tuffy", sans-serif;
+  font-weight: 700;
+}
+
+/* global padding */
+.content-padding {
+  padding-left: 4rem;
+  padding-right: 4rem;
+}
+
+/* responsive padding */
+@media (max-width: 768px) {
+  .content-padding {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .content-padding {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
+}
+
+/* footer */
+html,
+body {
+  height: 100%;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+}
+
+app-root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+router-outlet + * {
+  flex: 1;
+}
+
+app-footer {
+  margin-top: auto;
+}
