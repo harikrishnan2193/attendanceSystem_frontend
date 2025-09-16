@@ -195,7 +195,7 @@ Dashboard
 
 ## Backend Repository
 
-[Attendance Management Backend](https://github.com/harikrishnan2193/)
+[Attendance Management Backend](https://github.com/harikrishnan2193/attendanceSystem_backend)
 
 ---
 
