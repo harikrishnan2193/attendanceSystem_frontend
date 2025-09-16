@@ -162,18 +162,8 @@ v1.2.0 → Notifications & admin features
 
 v1.3.0 → Improved UI/UX with responsive design
 
-📸 Screenshots
-Add screenshots inside docs/screenshots/ folder.
-
-Example:
-
-Dashboard
-
-Leave Management
-
-Attendance History
-
-Mobile View
+Screenshot
+![Dashboard Screenshot](docs/dashboard.png)
 
 🌐 Live Demo
 👉 [Live Demo Link](https://attendance-system-frontend-p8s5.vercel.app/)
