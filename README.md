@@ -183,7 +183,7 @@ ng build --prod
 ## Screenshots
 
 Dashboard
-![Dashboard Screenshot](docs/screenshots/dashboard.png)
+![Dashboard Screenshot](docs/dashboard.png)
 
 ---
 
@@ -200,5 +200,3 @@ Dashboard
 ---
 
 Built using **Angular 18+** and **modern web technologies**
-
-```
