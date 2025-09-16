@@ -1,7 +1,3 @@
-
----
-
-```markdown
 # Attendance Management System
 
 A comprehensive **web-based attendance management system** built with **Angular 18+** and modern web technologies. This application provides **role-based access control** for employees and administrators to efficiently manage attendance, leave requests, and notifications.
@@ -11,67 +7,66 @@ A comprehensive **web-based attendance management system** built with **Angular 
 ## 🚀 Features
 
 ### 👨‍💼 For Employees
-- Real-time attendance tracking (check-in/check-out with live timer)  
-- Break management (start & end breaks during work hours)  
-- Submit leave requests with date range and reason  
-- Notifications for leave request status (approved/rejected/pending)  
-- View personal attendance history  
+
+- Real-time attendance tracking (check-in/check-out with live timer)
+- Break management (start & end breaks during work hours)
+- Submit leave requests with date range and reason
+- Notifications for leave request status (approved/rejected/pending)
+- View personal attendance history
 
 ### 🛠️ For Administrators
-- Manage employee accounts  
-- Approve/reject leave requests  
-- Monitor overall employee attendance  
-- Dashboard with real-time statistics & insights  
+
+- Manage employee accounts
+- Approve/reject leave requests
+- Monitor overall employee attendance
+- Dashboard with real-time statistics & insights
 
 ---
 
 ## 🛠️ Technology Stack
 
-- **Frontend**: Angular 18+ (Standalone Components)  
-- **Language**: TypeScript  
-- **Styling**: Bootstrap 5 + Custom CSS  
-- **Icons**: FontAwesome  
-- **Notifications**: SweetAlert2  
-- **Authentication**: JWT (Token-based)  
-- **HTTP Client**: Angular HttpClient + RxJS  
+- **Frontend**: Angular 18+ (Standalone Components)
+- **Language**: TypeScript
+- **Styling**: Bootstrap 5 + Custom CSS
+- **Icons**: FontAwesome
+- **Notifications**: SweetAlert2
+- **Authentication**: JWT (Token-based)
+- **HTTP Client**: Angular HttpClient + RxJS
 
 ---
 
 ## 📁 Project Structure
 
-```
-
 src/app/
 ├── core/
-│   ├── guards/         # Route guards (auth, admin, login)
-│   └── services/       # Application services
+│ ├── guards/ # Route guards (auth, admin, login)
+│ └── services/ # Application services
 ├── features/
-│   ├── auth/           # Login & registration
-│   ├── dashboard/      # Main dashboard & attendance tracking
-│   ├── attendance/     # Attendance history
-│   ├── leaves/         # Leave management
-│   ├── employees/      # Employee management (Admin only)
-│   └── notifications/  # Notification system
+│ ├── auth/ # Login & registration
+│ ├── dashboard/ # Main dashboard & attendance tracking
+│ ├── attendance/ # Attendance history
+│ ├── leaves/ # Leave management
+│ ├── employees/ # Employee management (Admin only)
+│ └── notifications/ # Notification system
 ├── layout/
-│   ├── header/         # Top navigation bar
-│   ├── sidebar/        # Sidebar navigation
-│   └── layout/         # Layout wrapper
+│ ├── header/ # Top navigation bar
+│ ├── sidebar/ # Sidebar navigation
+│ └── layout/ # Layout wrapper
 ├── docs/
-│   └── screenshots/     # Screenshots & demo images
-│       └── dashboard.png
+│ └── screenshots/ # Screenshots & demo images
+│ └── dashboard.png
 └── shared/
-└── components/     # Reusable components (404, etc.)
-
-````
+└── components/ # Reusable components (404, etc.)
 
 ---
 
-## Getting Started
+## ⚡ Getting Started
 
 ### Prerequisites
-- **Node.js** (v18+)  
-- **npm** or **yarn**  
-- **Angular CLI** (`npm install -g @angular/cli`)  
+
+- **Node.js** (v18+)
+- **npm** or **yarn**
+- **Angular CLI** (`npm install -g @angular/cli`)
 
 ### Installation
 
@@ -79,125 +74,111 @@ src/app/
    ```bash
    git clone <repository-url>
    cd frontend_attendanceSystem
-````
-
-2. **Install dependencies**
-
-   ```bash
-   npm install
+   Install dependencies
    ```
 
-3. **Configure environment**
+npm install
+Configure environment
 
-   * Update API endpoints in `src/environments/environment.ts`
-   * Set backend API URL and environment variables
+Update API endpoints in src/environments/environment.ts
 
-4. **Run the application**
+Set backend API URL and environment variables
 
-   ```bash
-   ng serve
-   ```
+Run the application
 
-   Visit **[http://localhost:4200/](http://localhost:4200/)**
+ng serve
+Visit http://localhost:4200/
 
-5. **Build for production**
+Build for production
 
-   ```bash
-   ng build --prod
-   ```
+ng build --prod
+🔐 Authentication & Authorization
+Public Routes → Login & Registration
 
----
+Protected Routes → Dashboard & Features (requires login)
 
-## Authentication & Authorization
+Admin Routes → Employee management & leave approvals
 
-* **Public Routes** → Login & Registration
-* **Protected Routes** → Dashboard & Features (requires login)
-* **Admin Routes** → Employee management & leave approvals
+User Roles
+EMPLOYEE → Attendance & leave features
 
-### User Roles
+ADMIN → Full access (employees, approvals, analytics)
 
-* **EMPLOYEE** → Attendance & leave features
-* **ADMIN** → Full access (employees, approvals, analytics)
+📱 Responsive Design
+Desktop → Full features with sidebar navigation
 
----
+Tablet → Adaptive layout with collapsible sidebar
 
-## Responsive Design
+Mobile → Touch-friendly, mobile-optimized UI
 
-* **Desktop** → Full features with sidebar navigation
-* **Tablet** → Adaptive layout with collapsible sidebar
-* **Mobile** → Touch-friendly, mobile-optimized UI
+🎨 UI/UX Highlights
+Modern, clean design with smooth animations
 
----
+Interactive elements (hover effects, loading states)
 
-## UI/UX Highlights
+Accessibility support (ARIA labels, keyboard navigation)
 
-* Modern, clean design with smooth animations
-* Interactive elements (hover effects, loading states)
-* Accessibility support (ARIA labels, keyboard navigation)
-* Consistent color scheme and typography
+Consistent color scheme and typography
 
----
+📊 API Endpoints (Sample)
+POST /api/auth/login → User login
 
-## API Endpoints (Sample)
+GET /api/attendance/status → Current attendance status
 
-* `POST /api/auth/login` → User login
-* `GET /api/attendance/status` → Current attendance status
-* `POST /api/attendance/checkin` → Check-in
-* `POST /api/attendance/checkout` → Check-out
-* `GET /api/leaves/getleaves` → Fetch leave requests
-* `PUT /api/leaves/update-status` → Approve/reject leave
+POST /api/attendance/checkin → Check-in
 
----
+POST /api/attendance/checkout → Check-out
 
-## Performance Optimizations
+GET /api/leaves/getleaves → Fetch leave requests
 
-* **Lazy Loading** → Load feature modules on demand
-* **OnPush Change Detection** → Efficient component updates
-* **Standalone Components** → Smaller bundle size
-* **Tree Shaking** → Remove unused code
+PUT /api/leaves/update-status → Approve/reject leave
 
----
+📈 Performance Optimizations
+Lazy Loading → Load feature modules on demand
 
-## Contributing
+OnPush Change Detection → Efficient component updates
 
-1. Fork the repository
-2. Create a feature branch → `git checkout -b feature/new-feature`
-3. Commit changes → `git commit -m "Add new feature"`
-4. Push branch → `git push origin feature/new-feature`
-5. Create a Pull Request
+Standalone Components → Smaller bundle size
 
----
+Tree Shaking → Remove unused code
 
-## Version History
+🤝 Contributing
+Fork the repository
 
-* **v1.0.0** → Initial release (core attendance features)
-* **v1.1.0** → Leave management system
-* **v1.2.0** → Notifications & admin features
-* **v1.3.0** → Improved UI/UX with responsive design
+Create a feature branch → git checkout -b feature/new-feature
 
----
+Commit changes → git commit -m "Add new feature"
 
-## Screenshots
+Push branch → git push origin feature/new-feature
+
+Create a Pull Request
+
+🔄 Version History
+v1.0.0 → Initial release (core attendance features)
+
+v1.1.0 → Leave management system
+
+v1.2.0 → Notifications & admin features
+
+v1.3.0 → Improved UI/UX with responsive design
+
+📸 Screenshots
+Add screenshots inside docs/screenshots/ folder.
 
 Example:
-![Dashboard Screenshot](docs/dashboard.png)
 
----
+Dashboard
 
-## 🌐 Live Demo
+Leave Management
 
- [Live Demo Link](https://attendance-system-frontend-p8s5.vercel.app/)
+Attendance History
 
----
+Mobile View
 
-##  Backend Repository
+🌐 Live Demo
+👉 [Live Demo Link](https://attendance-system-frontend-p8s5.vercel.app/)
 
- [Attendance Management Backend](https://github.com/harikrishnan2193/)
+🗄️ Backend Repository
+👉 [Attendance Management Backend](https://github.com/harikrishnan2193/)
 
----
-
-Built using **Angular 18+** and **modern web technologies**
-
-```
-
----
+📌 Built using Angular 18+ and modern web technologies
