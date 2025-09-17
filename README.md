@@ -42,27 +42,29 @@ A comprehensive **web-based attendance management system** built with **Angular 
 ```
 src/app/
 ├── core/
-│   ├── guards/           # Route guards (auth, admin, login)
-│   └── services/         # Application services
+│ ├── guards/ # Route guards (auth, admin, login)
+│ ├── interceptors/ # HTTP interceptors (loading, auth)
+│ └── services/ # Application services
 ├── features/
-│   ├── auth/             # Login & registration
-│   ├── dashboard/        # Main dashboard & attendance tracking
-│   ├── attendance/       # Attendance history
-│   ├── leaves/           # Leave management
-│   ├── employees/        # Employee management (Admin only)
-│   └── notifications/    # Notification system
+│ ├── auth/ # Login & registration
+│ ├── dashboard/ # Main dashboard & attendance tracking
+│ ├── attendance/ # Attendance history
+│ ├── leaves/ # Leave management
+│ ├── employees/ # Employee management (Admin only)
+│ └── notifications/ # Notification system
 ├── layout/
-│   ├── header/           # Top navigation bar
-│   ├── sidebar/          # Sidebar navigation
-│   └── layout/           # Layout wrapper
+│ ├── header/ # Top navigation bar
+│ ├── sidebar/ # Sidebar navigation
+│ └── layout/ # Layout wrapper
 ├── docs/
-│   └── screenshots/      # Screenshots & demo images
-│       ├── dashboard.png
-│       ├── leave-management.png
-│       ├── attendance-history.png
-│       └── mobile-view.png
+│ └── screenshots/ # Screenshots & demo images
+│ ├── dashboard.png
+│ ├── leave-management.png
+│ ├── attendance-history.png
+│ └── mobile-view.png
 └── shared/
-    └── components/       # Reusable components (404 page, etc.)
+└── components/ # Reusable components (loading, 404 page, etc.)
+└── loading/ # Global loading indicator
 ```
 
 ---
