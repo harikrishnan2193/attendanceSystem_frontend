@@ -30,7 +30,14 @@ export class AuthComponent {
 
   toggleMode() {
     this.isLogin = !this.isLogin;
-    this.formData = { name: '', email: '', password: '', confirmPassword: '' };
+    this.resetForm();
+  }
+
+  private resetForm() {
+    setTimeout(() => {
+      this.formData = { name: '', email: '', password: '', confirmPassword: '' };
+      this.cdr.detectChanges();
+    });
   }
 
   onSubmit() {
@@ -49,7 +56,6 @@ export class AuthComponent {
 
     this.authService.login(loginData).subscribe({
       next: (response) => {
-        // store token and user details in session storage
         if (response.token) {
           sessionStorage.setItem('token', response.token);
         }
@@ -57,11 +63,10 @@ export class AuthComponent {
           sessionStorage.setItem('user', JSON.stringify(response.user));
         }
 
-        this.formData = { name: '', email: '', password: '', confirmPassword: '' };
-
         this.router.navigate(['/home/dashboard']).then(() => {
           const successMessage = response.message || 'Login successful!';
           this.alertService.success(successMessage);
+          this.resetForm();
         });
       },
       error: (error) => {
@@ -80,15 +85,10 @@ export class AuthComponent {
 
     this.authService.register(this.formData).subscribe({
       next: (response) => {
-        // update state
         this.isLogin = true;
-        this.formData = { name: '', email: '', password: '', confirmPassword: '' };
-
-        // force change detection
-        this.cdr.detectChanges();
-
         const successMessage = response.message || 'Registration successful!';
         this.alertService.success(successMessage);
+        this.resetForm();
       },
       error: (error) => {
         console.error('Register error', error);
