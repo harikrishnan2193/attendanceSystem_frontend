@@ -74,7 +74,7 @@ export class NotificationsComponent implements OnInit {
       return;
     }
 
-    this.leaveService.updateLeaveStatus(token, request.user_id, newStatus).subscribe({
+    this.leaveService.updateLeaveStatus(token, request.id, newStatus).subscribe({
       next: (response) => {
         request.status = newStatus;
         this.alertService.success(`Leave request ${newStatus.toLowerCase()} successfully`);

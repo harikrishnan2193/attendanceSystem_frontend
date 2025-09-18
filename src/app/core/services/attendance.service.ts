@@ -38,12 +38,12 @@ export class AttendanceService {
     return this.http.post(`${this.baseUrl}/api/attendance/checkout`, { userId }, { headers });
   }
 
-  getAttendanceHistory(token: string, userId: string): Observable<any> {
+  getAttendanceHistory(token: string, userId: string, page: number = 1, limit: number = 5): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${token}`,
       'Content-Type': 'application/json',
     });
 
-    return this.http.get(`${this.baseUrl}/api/attendance/history/${userId}`, { headers });
+    return this.http.get(`${this.baseUrl}/api/attendance/history/${userId}?page=${page}&limit=${limit}`, { headers });
   }
 }

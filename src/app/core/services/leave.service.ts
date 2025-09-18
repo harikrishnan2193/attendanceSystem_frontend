@@ -28,7 +28,7 @@ export class LeaveService {
     return this.http.get(`${this.baseUrl}/api/leaves/getleaves`, { headers });
   }
 
-  updateLeaveStatus(token: string, userId: string, status: string): Observable<any> {
+  updateLeaveStatus(token: string, leaveId: number, status: string): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${token}`,
       'Content-Type': 'application/json',
@@ -36,7 +36,7 @@ export class LeaveService {
 
     return this.http.put(
       `${this.baseUrl}/api/leaves/update-status`,
-      { userId, status },
+      { leaveId, status },
       { headers }
     );
   }

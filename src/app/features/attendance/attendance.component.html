@@ -2,7 +2,7 @@
   <div class="header-row">
     <div>
       <h2 class="att-title">Attendance History</h2>
-      <small class="muted">Daily time spent and leave preview</small>
+      <small class="muted">Daily time spent, leave preview and breaks</small>
     </div>
     <div class="muted">
       Total records: <strong>{{ totalRecords }}</strong>
@@ -11,107 +11,218 @@
 
   <div class="att-card">
     @if (attendanceHistory.length > 0) {
-      <!-- desktop table -->
-      <table class="attendance-table">
-        <thead>
-          <tr>
-            <th>Date</th>
-            <th>Check-in</th>
-            <th>Check-out</th>
-            <th>Time Spent</th>
-            <th>Status</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let record of attendanceHistory" [class.leave-row]="record.status === 'Leave'">
-            <td>{{ formatDate(record.date) }}</td>
-            <td>{{ formatTime(record.checkIn) }}</td>
-            <td>{{ formatTime(record.checkOut) }}</td>
-            <td class="time-spent">{{ formatTimeSpent(record.timeSpent) }}</td>
-            <td>
-              <span [class]="record.status === 'Present' ? 'badge-present' : 'badge-leave'">
-                {{ record.status }}
-              </span>
-            </td>
-            <td>
-              @if (record.status === 'Leave') {
-                <button class="leave-btn" (click)="showLeavePreview(record)">Preview</button>
-              } @else {
-                <span>—</span>
-              }
-            </td>
-          </tr>
-        </tbody>
-      </table>
-
-      <!-- mobile cards -->
-      <div class="mobile-cards">
-        <div *ngFor="let record of attendanceHistory" 
-             class="attendance-card" 
-             [class.leave-card]="record.status === 'Leave'">
-          <div class="card-row">
-            <span class="card-label">Date</span>
-            <span class="card-value">{{ formatDate(record.date) }}</span>
-          </div>
-          <div class="card-row">
-            <span class="card-label">Check-in</span>
-            <span class="card-value">{{ formatTime(record.checkIn) }}</span>
-          </div>
-          <div class="card-row">
-            <span class="card-label">Check-out</span>
-            <span class="card-value">{{ formatTime(record.checkOut) }}</span>
-          </div>
-          <div class="card-row">
-            <span class="card-label">Time Spent</span>
-            <span class="card-value time-spent">{{ formatTimeSpent(record.timeSpent) }}</span>
-          </div>
-          <div class="card-row">
-            <span class="card-label">Status</span>
+    <!-- desktop table -->
+    <table class="attendance-table">
+      <thead>
+        <tr>
+          @if (isAdmin) {
+          <th>Employee</th>
+          }
+          <th>Date</th>
+          <th>Check-in</th>
+          <th>Check-out</th>
+          <th>Time Spent</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let record of attendanceHistory" [class.leave-row]="record.status === 'Leave'">
+          @if (isAdmin) {
+          <td>
+            <div class="employee-info">
+              <div class="employee-name">{{ record.name }}</div>
+              <div class="employee-email">{{ record.email }}</div>
+            </div>
+          </td>
+          }
+          <td>{{ formatDate(record.date) }}</td>
+          <td>{{ formatTime(record.checkIn) }}</td>
+          <td>{{ formatTime(record.checkOut) }}</td>
+          <td class="time-spent">{{ formatTimeSpent(record.timeSpent) }}</td>
+          <td>
             <span [class]="record.status === 'Present' ? 'badge-present' : 'badge-leave'">
               {{ record.status }}
             </span>
+          </td>
+          <td>
+            @if (record.status === 'Leave') {
+            <button class="leave-btn" (click)="showLeavePreview(record)">Preview</button>
+            } @else if (record.breaks && record.breaks.length > 0) {
+            <button class="leave-btn" (click)="showBreaksPreview(record)">View Breaks</button>
+            } @else {
+            <span>—</span>
+            }
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- mobile cards -->
+    <div class="mobile-cards">
+      <div
+        *ngFor="let record of attendanceHistory"
+        class="attendance-card"
+        [class.leave-card]="record.status === 'Leave'"
+      >
+        @if (isAdmin) {
+        <div class="card-row employee-row">
+          <span class="card-label">Employee</span>
+          <div class="card-value-employee">
+            <div class="employee-name">{{ record.name }}</div>
+            <div class="employee-email">{{ record.email }}</div>
           </div>
-          @if (record.status === 'Leave') {
-            <div class="card-row">
-              <span class="card-label">Action</span>
-              <button class="leave-btn" (click)="showLeavePreview(record)">Preview</button>
-            </div>
-          }
         </div>
+        }
+        <div class="card-row">
+          <span class="card-label">Date</span>
+          <span class="card-value">{{ formatDate(record.date) }}</span>
+        </div>
+        <div class="card-row">
+          <span class="card-label">Check-in</span>
+          <span class="card-value">{{ formatTime(record.checkIn) }}</span>
+        </div>
+        <div class="card-row">
+          <span class="card-label">Check-out</span>
+          <span class="card-value">{{ formatTime(record.checkOut) }}</span>
+        </div>
+        <div class="card-row">
+          <span class="card-label">Time Spent</span>
+          <span class="card-value time-spent">{{ formatTimeSpent(record.timeSpent) }}</span>
+        </div>
+        <div class="card-row">
+          <span class="card-label">Status</span>
+          <span [class]="record.status === 'Present' ? 'badge-present' : 'badge-leave'">
+            {{ record.status }}
+          </span>
+        </div>
+        @if (record.status === 'Leave') {
+        <div class="card-row">
+          <span class="card-label">Action</span>
+          <button class="leave-btn" (click)="showLeavePreview(record)">Preview</button>
+        </div>
+        } @else if (record.breaks && record.breaks.length > 0) {
+        <div class="card-row">
+          <span class="card-label">Action</span>
+          <button class="leave-btn" (click)="showBreaksPreview(record)">View Breaks</button>
+        </div>
+        }
       </div>
+    </div>
+
+    <!-- pagination controls -->
+    <div class="pagination-wrapper">
+      <div class="pagination-controls">
+        <button class="pagination-btn" (click)="previousPage()" [disabled]="currentPage === 1">
+          < Previous
+        </button>
+        <span class="pagination-info">
+          Page {{ currentPage }} | Total: {{ totalRecords }} records
+        </span>
+        <button class="pagination-btn" (click)="nextPage()" [disabled]="!hasMore || isLoading">
+          {{ isLoading ? 'Loading...' : 'Next >' }}
+        </button>
+      </div>
+    </div>
+
     } @else {
-      <div class="empty-state">
-        <div class="empty-icon">📅</div>
-        <h3>No Attendance Records</h3>
-        <p>You don't have any attendance history yet. Start by checking in to work!</p>
-      </div>
+    <div class="empty-state">
+      <div class="empty-icon">📅</div>
+      <h3>No Attendance Records</h3>
+      <p>You don't have any attendance history yet. Start by checking in to work!</p>
+    </div>
     }
   </div>
 
   <!-- leave preview modal -->
   @if (showPreview) {
-    <div class="preview-overlay" (click)="closePreview()">
-      <div class="preview-modal" (click)="$event.stopPropagation()">
-        <div class="preview-header">
-          <h3>Leave Details</h3>
-          <button class="close-btn" (click)="closePreview()">&times;</button>
+  <div class="preview-overlay" (click)="closePreview()">
+    <div class="preview-modal" (click)="$event.stopPropagation()">
+      <div class="preview-header">
+        <h3>Leave Details</h3>
+        <button class="close-btn" (click)="closePreview()">&times;</button>
+      </div>
+      <div class="preview-content">
+        @if (isAdmin) {
+        <div class="preview-item">
+          <label>Employee:</label>
+          <div class="employee-info">
+            <div class="employee-name">{{ selectedLeave?.name }}</div>
+            <div class="employee-email">{{ selectedLeave?.email }}</div>
+          </div>
         </div>
-        <div class="preview-content">
-          <div class="preview-item">
-            <label>Date:</label>
-            <span>{{ formatDate(selectedLeave?.date) }}</span>
-          </div>
-          <div class="preview-item">
-            <label>Status:</label>
-            <span class="badge-leave text-black">{{ selectedLeave?.status }}</span>
-          </div>
-          <div class="preview-item">
-            <label>Reason:</label>
-            <p>{{ selectedLeave?.reason }}</p>
-          </div>
+        }
+        <div class="preview-item">
+          <label>Date:</label>
+          <span>{{ formatDate(selectedLeave?.date) }}</span>
+        </div>
+        <div class="preview-item">
+          <label>Status:</label>
+          <span class="badge-leave text-black">{{ selectedLeave?.status }}</span>
+        </div>
+        <div class="preview-item">
+          <label>Reason:</label>
+          <p>{{ selectedLeave?.reason }}</p>
         </div>
       </div>
     </div>
+  </div>
+  }
+
+  <!-- breaks preview modal -->
+  @if (showBreaksModal) {
+  <div class="preview-overlay" (click)="closeBreaksPreview()">
+    <div class="preview-modal" (click)="$event.stopPropagation()">
+      <div class="preview-header">
+        <h3>Breaks taken on {{ formatDate(selectedRecord?.date) }}</h3>
+        <button class="close-btn" (click)="closeBreaksPreview()">&times;</button>
+      </div>
+      <div class="preview-content">
+        @if (isAdmin) {
+        <div class="preview-item">
+          <label>Employee:</label>
+          <div class="employee-info">
+            <div class="employee-name">{{ selectedRecord?.name }}</div>
+            <div class="employee-email">{{ selectedRecord?.email }}</div>
+          </div>
+        </div>
+        } @if (selectedRecord?.breaks && selectedRecord.breaks.length > 0) {
+        <div *ngFor="let breakItem of getPaginatedBreaks(); let i = index" class="preview-item">
+          <label>Break {{ currentBreakPage * 4 + i + 1 }}:</label>
+          <div>
+            <p><strong>Start:</strong> {{ breakItem.breakStart }}</p>
+            <p><strong>End:</strong> {{ breakItem.breakEnd }}</p>
+            <p><strong>Duration:</strong> {{ breakItem.duration }}</p>
+          </div>
+        </div>
+
+        @if (selectedRecord.breaks.length > 4) {
+        <div class="pagination-controls">
+          <button
+            class="pagination-btn"
+            (click)="previousBreakPage()"
+            [disabled]="currentBreakPage === 0"
+          >
+            <
+          </button>
+          <span class="pagination-info">
+            {{ currentBreakPage + 1 }} / {{ getTotalBreakPages() }}
+          </span>
+          <button
+            class="pagination-btn"
+            (click)="nextBreakPage()"
+            [disabled]="currentBreakPage >= getTotalBreakPages() - 1"
+          >
+            >
+          </button>
+        </div>
+        } } @else {
+        <div class="preview-item">
+          <p>No breaks taken on this day</p>
+        </div>
+        }
+      </div>
+    </div>
+  </div>
   }
 </div>

@@ -42,4 +42,13 @@ export class AlertService {
       cancelButtonText: 'No',
     });
   }
+
+  info(message: string, title: string = 'Info') {
+    return Swal.fire({
+      title,
+      text: message,
+      icon: 'info',
+      confirmButtonText: 'OK',
+    });
+  }
 }
