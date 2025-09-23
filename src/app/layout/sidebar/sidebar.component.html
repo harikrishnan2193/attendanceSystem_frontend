@@ -39,15 +39,25 @@
       <i class="fa-solid fa-bell"></i>
       <span>Notifications</span>
     </a>
+    @if (isAdmin) {
     <a
       routerLink="/home/employees"
       class="nav-link"
       routerLinkActive="active"
-      *ngIf="isAdmin"
       (click)="onNavClick()"
     >
       <i class="fa-solid fa-users"></i>
       <span>View Employees</span>
     </a>
+    <a
+      routerLink="/home/register"
+      class="nav-link"
+      routerLinkActive="active"
+      (click)="onNavClick()"
+    >
+      <i class="fa-solid fa-user-plus"></i>
+      <span>Add New User</span>
+    </a>
+    }
   </nav>
 </div>

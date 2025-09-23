@@ -18,7 +18,8 @@ export const routes: Routes = [
       { path: 'attendance', loadComponent: () => import('./features/attendance/attendance.component').then(c => c.AttendanceComponent) },
       { path: 'employees', loadComponent: () => import('./features/employees/employees.component').then(c => c.EmployeesComponent), canActivate: [adminGuard] },
       { path: 'leaves', loadComponent: () => import('./features/leaves/leaves.component').then(c => c.LeavesComponent) },
-      { path: 'notifications', loadComponent: () => import('./features/notifications/notifications.component').then(c => c.NotificationsComponent) }
+      { path: 'notifications', loadComponent: () => import('./features/notifications/notifications.component').then(c => c.NotificationsComponent) },
+      { path: 'register', loadComponent: () => import('./features/register/register.component').then(c => c.RegisterComponent), canActivate: [adminGuard] }
     ]
   },
   { 

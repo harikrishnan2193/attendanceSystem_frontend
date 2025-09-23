@@ -40,7 +40,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
     const user = userStr ? JSON.parse(userStr) : null;
     const userId = user?.user_id;
 
-    if (!token || !userId) return;
+    if (!token || !userId) {
+      this.alertService.warning('You are not authenticated');
+      return;
+    }
 
     this.attendanceService.getAttendanceStatus(token, userId).subscribe({
       next: (response) => {
@@ -80,7 +83,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   checkBreakStatus() {
     const token = sessionStorage.getItem('token');
-    if (!token) return;
+    if (!token) {
+      this.alertService.warning('You are not authenticated');
+      return;
+    }
 
     this.breaksService.getCurrentBreakStatus(token).subscribe({
       next: (response) => {
@@ -116,7 +122,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   onBreakAction() {
     const token = sessionStorage.getItem('token');
-    if (!token) return;
+    if (!token) {
+      this.alertService.warning('You are not authenticated');
+      return;
+    }
 
     if (this.breakStatus === 'not_on_break') {
       this.startBreak(token);

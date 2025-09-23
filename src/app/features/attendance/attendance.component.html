@@ -1,157 +1,185 @@
 <div class="content-padding attendance-wrap">
+  <!-- header -->
   <div class="header-row">
     <div>
-      <h2 class="att-title">Attendance History</h2>
-      <small class="muted">Daily time spent, leave preview and breaks</small>
+      <h2 class="att-title">Attendance Management</h2>
+      <small class="muted">Analytics, working hours & detailed records</small>
     </div>
+
     <div class="muted">
       Total records: <strong>{{ totalRecords }}</strong>
     </div>
   </div>
 
+  <!-- filters & controls -->
+  <div class="att-filters">
+    <div class="filter-item">
+      <label>Select Type</label>
+      <select [(ngModel)]="filterType" (change)="onFilterChange()">
+        <option value="all">All</option>
+        <option value="month">Monthly</option>
+        <option value="week">Last 7 days</option>
+        <option value="date">Specific Date</option>
+        <option value="range">Date Range</option>
+      </select>
+    </div>
+
+    <div class="filter-item" *ngIf="filterType === 'month'">
+      <label>Select Month</label>
+      <input type="month" [(ngModel)]="selectedMonth" (change)="onFilterChange()" />
+    </div>
+
+    <div class="filter-item" *ngIf="filterType === 'date'">
+      <label>Select Date</label>
+      <input type="date" [(ngModel)]="selectedDate" (change)="onFilterChange()" />
+    </div>
+
+    <div class="filter-item" *ngIf="filterType === 'range'">
+      <label>Start</label>
+      <input type="date" [(ngModel)]="startDate" (change)="onFilterChange()" />
+      <label>End</label>
+      <input type="date" [(ngModel)]="endDate" (change)="onFilterChange()" />
+    </div>
+  </div>
+
+  <!-- analytics summary -->
+  <div class="analytics-cards">
+    <div class="analytic-card">
+      <h4>Total Working Hours</h4>
+      <p>{{ analytics.totalWorkingHours }} hrs</p>
+    </div>
+
+    <div class="analytic-card">
+      <h4>Overtime Hours</h4>
+      <p>{{ analytics.totalOvertime }} hrs</p>
+    </div>
+
+    <div class="analytic-card">
+      <h4>Leaves</h4>
+      <p>{{ analytics.totalLeaves }}</p>
+    </div>
+  </div>
+
+  <!-- table filters -->
+  <div class="table-filters">
+    <div class="filter-item">
+      <label>Status</label>
+      <select [(ngModel)]="selectedStatus" (change)="onFilterChange()">
+        <option value="all">All</option>
+        <option value="present">Present</option>
+        <option value="leave">Leave</option>
+      </select>
+    </div>
+
+    <div class="filter-item">
+      <label>Search</label>
+      <input
+        type="text"
+        placeholder="Name or email"
+        [(ngModel)]="searchQuery"
+        (input)="onSearchInput()"
+      />
+    </div>
+  </div>
+
+  <!-- attendance card -->
   <div class="att-card">
-    @if (attendanceHistory.length > 0) {
-    <!-- desktop table -->
-    <table class="attendance-table">
-      <thead>
-        <tr>
-          @if (isAdmin) {
-          <th>Employee</th>
-          }
-          <th>Date</th>
-          <th>Check-in</th>
-          <th>Check-out</th>
-          <th>Time Spent</th>
-          <th>Status</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let record of attendanceHistory" [class.leave-row]="record.status === 'Leave'">
-          @if (isAdmin) {
-          <td>
-            <div class="employee-info">
-              <div class="employee-name">{{ record.name }}</div>
-              <div class="employee-email">{{ record.email }}</div>
-            </div>
-          </td>
-          }
-          <td>{{ formatDate(record.date) }}</td>
-          <td>{{ formatTime(record.checkIn) }}</td>
-          <td>{{ formatTime(record.checkOut) }}</td>
-          <td class="time-spent">{{ formatTimeSpent(record.timeSpent) }}</td>
-          <td>
-            <span [class]="record.status === 'Present' ? 'badge-present' : 'badge-leave'">
-              {{ record.status }}
-            </span>
-          </td>
-          <td>
-            @if (record.status === 'Leave') {
-            <button class="leave-btn" (click)="showLeavePreview(record)">Preview</button>
-            } @else if (record.breaks && record.breaks.length > 0) {
-            <button class="leave-btn" (click)="showBreaksPreview(record)">View Breaks</button>
-            } @else {
-            <span>—</span>
-            }
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <ng-container *ngIf="attendanceHistory && attendanceHistory.length > 0; else empty">
+      <table class="attendance-table">
+        <thead>
+          <tr>
+            <th *ngIf="isAdmin">Employee</th>
+            <th>Date</th>
+            <th>Check-in</th>
+            <th>Check-out</th>
+            <th>Time Spent</th>
+            <th>Overtime</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="let record of attendanceHistory"
+            [class.leave-row]="record.status === 'Leave'"
+          >
+            <td *ngIf="isAdmin">
+              <div class="employee-info">
+                <div class="employee-name">{{ record.name }}</div>
+                <div class="employee-email">{{ record.email }}</div>
+              </div>
+            </td>
+            <td>{{ formatDate(record.date) }}</td>
+            <td>{{ formatTime(record.checkIn) }}</td>
+            <td>{{ formatTime(record.checkOut) }}</td>
+            <td class="time-spent">{{ formatTimeSpent(record.timeSpent) }}</td>
+            <td class="overtime">{{ formatTimeSpent(record.overtime) }}</td>
+            <td>
+              <span [ngClass]="record.status === 'Present' ? 'badge-present' : 'badge-leave'">
+                {{ record.status }}
+              </span>
+            </td>
+            <td>
+              <button
+                *ngIf="record.status === 'Leave'"
+                class="leave-btn"
+                (click)="showLeavePreview(record)"
+              >
+                Preview
+              </button>
+              <button
+                *ngIf="record.status !== 'Leave' && record.breaks?.length"
+                class="leave-btn"
+                (click)="showBreaksPreview(record)"
+              >
+                View Breaks
+              </button>
+              <span *ngIf="record.status !== 'Leave' && !record.breaks?.length">—</span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
 
-    <!-- mobile cards -->
-    <div class="mobile-cards">
-      <div
-        *ngFor="let record of attendanceHistory"
-        class="attendance-card"
-        [class.leave-card]="record.status === 'Leave'"
-      >
-        @if (isAdmin) {
-        <div class="card-row employee-row">
-          <span class="card-label">Employee</span>
-          <div class="card-value-employee">
-            <div class="employee-name">{{ record.name }}</div>
-            <div class="employee-email">{{ record.email }}</div>
-          </div>
+      <!-- pagination controls -->
+      <div class="pagination-wrapper">
+        <div class="pagination-controls">
+          <button class="pagination-btn" (click)="previousPage()" [disabled]="currentPage === 1">
+            &lt; Previous
+          </button>
+          <span class="pagination-info"
+            >Page {{ currentPage }} | Total: {{ totalRecords }} records</span
+          >
+          <button class="pagination-btn" (click)="nextPage()" [disabled]="!hasMore || isLoading">
+            {{ isLoading ? 'Loading...' : 'Next >' }}
+          </button>
         </div>
-        }
-        <div class="card-row">
-          <span class="card-label">Date</span>
-          <span class="card-value">{{ formatDate(record.date) }}</span>
-        </div>
-        <div class="card-row">
-          <span class="card-label">Check-in</span>
-          <span class="card-value">{{ formatTime(record.checkIn) }}</span>
-        </div>
-        <div class="card-row">
-          <span class="card-label">Check-out</span>
-          <span class="card-value">{{ formatTime(record.checkOut) }}</span>
-        </div>
-        <div class="card-row">
-          <span class="card-label">Time Spent</span>
-          <span class="card-value time-spent">{{ formatTimeSpent(record.timeSpent) }}</span>
-        </div>
-        <div class="card-row">
-          <span class="card-label">Status</span>
-          <span [class]="record.status === 'Present' ? 'badge-present' : 'badge-leave'">
-            {{ record.status }}
-          </span>
-        </div>
-        @if (record.status === 'Leave') {
-        <div class="card-row">
-          <span class="card-label">Action</span>
-          <button class="leave-btn" (click)="showLeavePreview(record)">Preview</button>
-        </div>
-        } @else if (record.breaks && record.breaks.length > 0) {
-        <div class="card-row">
-          <span class="card-label">Action</span>
-          <button class="leave-btn" (click)="showBreaksPreview(record)">View Breaks</button>
-        </div>
-        }
       </div>
-    </div>
+    </ng-container>
 
-    <!-- pagination controls -->
-    <div class="pagination-wrapper">
-      <div class="pagination-controls">
-        <button class="pagination-btn" (click)="previousPage()" [disabled]="currentPage === 1">
-          < Previous
-        </button>
-        <span class="pagination-info">
-          Page {{ currentPage }} | Total: {{ totalRecords }} records
-        </span>
-        <button class="pagination-btn" (click)="nextPage()" [disabled]="!hasMore || isLoading">
-          {{ isLoading ? 'Loading...' : 'Next >' }}
-        </button>
+    <ng-template #empty>
+      <div class="empty-state">
+        <div class="empty-icon">📅</div>
+        <h3>No Attendance Records</h3>
+        <p>You don't have any attendance history yet. Start by checking in to work!</p>
       </div>
-    </div>
-
-    } @else {
-    <div class="empty-state">
-      <div class="empty-icon">📅</div>
-      <h3>No Attendance Records</h3>
-      <p>You don't have any attendance history yet. Start by checking in to work!</p>
-    </div>
-    }
+    </ng-template>
   </div>
 
   <!-- leave preview modal -->
-  @if (showPreview) {
-  <div class="preview-overlay" (click)="closePreview()">
+  <div *ngIf="showPreview" class="preview-overlay" (click)="closePreview()">
     <div class="preview-modal" (click)="$event.stopPropagation()">
       <div class="preview-header">
         <h3>Leave Details</h3>
         <button class="close-btn" (click)="closePreview()">&times;</button>
       </div>
       <div class="preview-content">
-        @if (isAdmin) {
-        <div class="preview-item">
+        <div *ngIf="isAdmin" class="preview-item">
           <label>Employee:</label>
           <div class="employee-info">
             <div class="employee-name">{{ selectedLeave?.name }}</div>
             <div class="employee-email">{{ selectedLeave?.email }}</div>
           </div>
         </div>
-        }
         <div class="preview-item">
           <label>Date:</label>
           <span>{{ formatDate(selectedLeave?.date) }}</span>
@@ -167,62 +195,58 @@
       </div>
     </div>
   </div>
-  }
 
   <!-- breaks preview modal -->
-  @if (showBreaksModal) {
-  <div class="preview-overlay" (click)="closeBreaksPreview()">
+  <div *ngIf="showBreaksModal" class="preview-overlay" (click)="closeBreaksPreview()">
     <div class="preview-modal" (click)="$event.stopPropagation()">
       <div class="preview-header">
         <h3>Breaks taken on {{ formatDate(selectedRecord?.date) }}</h3>
         <button class="close-btn" (click)="closeBreaksPreview()">&times;</button>
       </div>
       <div class="preview-content">
-        @if (isAdmin) {
-        <div class="preview-item">
+        <div *ngIf="isAdmin" class="preview-item">
           <label>Employee:</label>
           <div class="employee-info">
             <div class="employee-name">{{ selectedRecord?.name }}</div>
             <div class="employee-email">{{ selectedRecord?.email }}</div>
           </div>
         </div>
-        } @if (selectedRecord?.breaks && selectedRecord.breaks.length > 0) {
-        <div *ngFor="let breakItem of getPaginatedBreaks(); let i = index" class="preview-item">
-          <label>Break {{ currentBreakPage * 4 + i + 1 }}:</label>
-          <div>
-            <p><strong>Start:</strong> {{ breakItem.breakStart }}</p>
-            <p><strong>End:</strong> {{ breakItem.breakEnd }}</p>
-            <p><strong>Duration:</strong> {{ breakItem.duration }}</p>
+
+        <div *ngIf="selectedRecord?.breaks?.length; else noBreaks">
+          <div *ngFor="let breakItem of getPaginatedBreaks(); let i = index" class="preview-item">
+            <label>Break {{ currentBreakPage * breaksPerPage + i + 1 }}:</label>
+            <div>
+              <p><strong>Start:</strong> {{ breakItem.breakStart }}</p>
+              <p><strong>End:</strong> {{ breakItem.breakEnd }}</p>
+              <p><strong>Duration:</strong> {{ breakItem.duration }}</p>
+            </div>
+          </div>
+
+          <div *ngIf="selectedRecord.breaks.length > breaksPerPage" class="pagination-controls">
+            <button
+              class="pagination-btn"
+              (click)="previousBreakPage()"
+              [disabled]="currentBreakPage === 0"
+            >
+              &lt;
+            </button>
+            <span class="pagination-info"
+              >{{ currentBreakPage + 1 }} / {{ getTotalBreakPages() }}</span
+            >
+            <button
+              class="pagination-btn"
+              (click)="nextBreakPage()"
+              [disabled]="currentBreakPage >= getTotalBreakPages() - 1"
+            >
+              &gt;
+            </button>
           </div>
         </div>
 
-        @if (selectedRecord.breaks.length > 4) {
-        <div class="pagination-controls">
-          <button
-            class="pagination-btn"
-            (click)="previousBreakPage()"
-            [disabled]="currentBreakPage === 0"
-          >
-            <
-          </button>
-          <span class="pagination-info">
-            {{ currentBreakPage + 1 }} / {{ getTotalBreakPages() }}
-          </span>
-          <button
-            class="pagination-btn"
-            (click)="nextBreakPage()"
-            [disabled]="currentBreakPage >= getTotalBreakPages() - 1"
-          >
-            >
-          </button>
-        </div>
-        } } @else {
-        <div class="preview-item">
-          <p>No breaks taken on this day</p>
-        </div>
-        }
+        <ng-template #noBreaks>
+          <div class="preview-item"><p>No breaks taken on this day</p></div>
+        </ng-template>
       </div>
     </div>
   </div>
-  }
 </div>

@@ -1,71 +1,49 @@
 <div class="auth-container">
   <div class="auth-card">
     <div class="auth-header">
-      <h2>{{ isLogin ? 'Login' : 'Register' }}</h2>
-      <p>{{ isLogin ? 'Welcome back!' : 'Create your account' }}</p>
+      <h2>Login</h2>
+      <p>Welcome back!</p>
     </div>
 
     <form class="auth-form">
-      @if (!isLogin) {
-      <div class="form-group">
-        <input
-          type="text"
-          placeholder="Full Name"
-          class="form-control"
-          [(ngModel)]="formData.name"
-          name="name"
-          required
-        />
-      </div>
-      }
-
-      <div class="form-group">
+      <div class="input-box">
         <input
           type="email"
-          placeholder="Email"
-          class="form-control"
+          id="email"
+          class="input-field"
           [(ngModel)]="formData.email"
           name="email"
           required
         />
+        <label for="email" class="label">Email</label>
+        <i class="fa-regular fa-envelope icon"></i>
       </div>
 
-      <div class="form-group">
+      <div class="input-box">
         <input
           type="password"
-          placeholder="Password"
-          class="form-control"
+          id="password"
+          class="input-field"
           [(ngModel)]="formData.password"
           name="password"
           required
         />
+        <label for="password" class="label">Password</label>
+        <i class="fa-solid fa-lock icon"></i>
       </div>
 
-      @if (!isLogin) {
-      <div class="form-group">
-        <input
-          type="password"
-          placeholder="Confirm Password"
-          class="form-control"
-          [(ngModel)]="formData.confirmPassword"
-          name="confirmPassword"
-          required
-        />
-      </div>
-      }
-
-      <button type="button" (click)="login()" *ngIf="isLogin" class="btn-auth">Login</button>
-
-      <button type="button" (click)="register()" *ngIf="!isLogin" class="btn-auth">Register</button>
+      <button type="button" (click)="login()" class="btn-auth">Login</button>
     </form>
 
-    <div class="auth-toggle">
-      <p>
-        {{ isLogin ? "Don't have an account?" : 'Already have an account?' }}
-        <span (click)="toggleMode()" class="toggle-link">
-          {{ isLogin ? 'Register' : 'Login' }}
-        </span>
-      </p>
+    <!-- oauth section -->
+    <div class="oauth-section">
+      <div class="divider">
+        <span>OR</span>
+      </div>
+      <button type="button" class="btn-oauth-google" (click)="signInWithGoogle()">
+        <i class="fab fa-google"></i>
+        Continue with Google
+      </button>
     </div>
   </div>
 </div>

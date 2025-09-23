@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 
@@ -38,12 +38,43 @@ export class AttendanceService {
     return this.http.post(`${this.baseUrl}/api/attendance/checkout`, { userId }, { headers });
   }
 
-  getAttendanceHistory(token: string, userId: string, page: number = 1, limit: number = 5): Observable<any> {
+  getAttendanceHistory(
+    token: string,
+    userId: string,
+    page: number = 1,
+    limit: number = 5,
+    filters: any = {}
+  ): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${token}`,
       'Content-Type': 'application/json',
     });
 
-    return this.http.get(`${this.baseUrl}/api/attendance/history/${userId}?page=${page}&limit=${limit}`, { headers });
+    let params = new HttpParams().set('page', String(page)).set('limit', String(limit));
+
+    // attach filters (only when present)
+    Object.keys(filters || {}).forEach((k) => {
+      const v = filters[k];
+      if (v !== undefined && v !== null && String(v).trim() !== '') {
+        params = params.set(k, String(v));
+      }
+    });
+
+    return this.http.get(`${this.baseUrl}/api/attendance/history/${userId}`, {
+      headers,
+      params,
+    });
+  }
+
+  getAnalyticsData(token: string, params: { type: string; month: string }) {
+    const headers = {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    };
+
+    return this.http.get<any>(`${this.baseUrl}/api/attendance/analytics`, {
+      params,
+      headers,
+    });
   }
 }

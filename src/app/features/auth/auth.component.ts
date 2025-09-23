@@ -1,4 +1,4 @@
-import { Component, ChangeDetectorRef } from '@angular/core';
+import { Component, ChangeDetectorRef, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -12,8 +12,8 @@ import { AlertService } from '../../core/services/alert.service';
   templateUrl: './auth.component.html',
   styleUrls: ['./auth.component.css'],
 })
-export class AuthComponent {
-  isLogin = true;
+export class AuthComponent implements OnInit {
+  // form data
   formData = {
     name: '',
     email: '',
@@ -28,11 +28,12 @@ export class AuthComponent {
     private cdr: ChangeDetectorRef
   ) {}
 
-  toggleMode() {
-    this.isLogin = !this.isLogin;
-    this.resetForm();
+  async ngOnInit(): Promise<void> {
+    // oauth initializ (pre-load google oauth)
+    await this.authService.initOAuth();
   }
 
+  // reset form data
   private resetForm() {
     setTimeout(() => {
       this.formData = { name: '', email: '', password: '', confirmPassword: '' };
@@ -40,14 +41,7 @@ export class AuthComponent {
     });
   }
 
-  onSubmit() {
-    if (this.isLogin) {
-      this.login();
-    } else {
-      this.register();
-    }
-  }
-
+  // for users login
   login() {
     const loginData = {
       email: this.formData.email,
@@ -56,6 +50,7 @@ export class AuthComponent {
 
     this.authService.login(loginData).subscribe({
       next: (response) => {
+        //store token & user detils on session
         if (response.token) {
           sessionStorage.setItem('token', response.token);
         }
@@ -63,6 +58,7 @@ export class AuthComponent {
           sessionStorage.setItem('user', JSON.stringify(response.user));
         }
 
+        // navigate to home page
         this.router.navigate(['/home/dashboard']).then(() => {
           const successMessage = response.message || 'Login successful!';
           this.alertService.success(successMessage);
@@ -77,24 +73,8 @@ export class AuthComponent {
     });
   }
 
-  register() {
-    if (this.formData.password !== this.formData.confirmPassword) {
-      this.alertService.error('Passwords do not match!');
-      return;
-    }
-
-    this.authService.register(this.formData).subscribe({
-      next: (response) => {
-        this.isLogin = true;
-        const successMessage = response.message || 'Registration successful!';
-        this.alertService.success(successMessage);
-        this.resetForm();
-      },
-      error: (error) => {
-        console.error('Register error', error);
-        const errorMessage = error.error?.message || 'Registration failed. Please try again.';
-        this.alertService.error(errorMessage);
-      },
-    });
+  // oauth login
+  async signInWithGoogle(): Promise<void> {
+    await this.authService.signInWithGoogle();
   }
 }
