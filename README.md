@@ -205,7 +205,7 @@ Dashboard
 
 ## Live Demo
 
-[Live Demo Link](https://attendance-system-frontend-p8s5.vercel.app/)
+[Live Demo Link](https://attendance-system-frontend-blond.vercel.app)
 
 ---
 
