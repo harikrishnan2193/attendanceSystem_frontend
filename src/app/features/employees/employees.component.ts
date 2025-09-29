@@ -30,6 +30,7 @@ export class EmployeesComponent implements OnInit {
     this.loadEmployees();
   }
 
+  // load all employees from server
   loadEmployees() {
     const token = sessionStorage.getItem('token');
     const userStr = sessionStorage.getItem('user');
@@ -71,6 +72,7 @@ export class EmployeesComponent implements OnInit {
     });
   }
 
+  // get current date formatted for display
   getCurrentDate(): string {
     return new Date().toLocaleDateString('en-US', {
       year: 'numeric',
@@ -79,6 +81,7 @@ export class EmployeesComponent implements OnInit {
     });
   }
 
+  // remove employee with confirmation
   removeEmployee(userId: string, name: string) {
     this.alertService
       .confirm(`Are you sure you want to remove ${name}?`, 'Remove Employee')
@@ -120,6 +123,7 @@ export class EmployeesComponent implements OnInit {
       });
   }
 
+  // get CSS class based on employee status
   getStatusClass(status: string): string {
     switch (status) {
       case 'Checked In':
@@ -137,22 +141,27 @@ export class EmployeesComponent implements OnInit {
     }
   }
 
+  // get available users for assignment
   getAvailableUsers() {
+    // get authentication data from session
     const token = sessionStorage.getItem('token');
     const userStr = sessionStorage.getItem('user');
     const user = userStr ? JSON.parse(userStr) : null;
     const userId = user?.user_id;
 
+    // validate authentication
     if (!token || !userId) {
       this.alertService.warning('You are not logged in, need to login');
       this.router.navigate(['/']);
       return;
     }
 
+    // fetch available users from server
     this.employeeService.getAvailableUsers(token, userId).subscribe({
       next: (response) => {
         this.availableUsers = response?.users || [];
 
+        // show modal if users found, otherwise show warning
         if (this.availableUsers.length > 0) {
           this.showModal = true;
           this.selectedUserId = '';
@@ -165,6 +174,7 @@ export class EmployeesComponent implements OnInit {
       error: (error) => {
         console.error('Error fetching available users:', error);
 
+        // handle authentication errors
         if (error.status === 401) {
           sessionStorage.clear();
           this.router.navigate(['/']).then(() => {
@@ -180,13 +190,16 @@ export class EmployeesComponent implements OnInit {
     });
   }
 
+  // close assignment modal
   closeModal() {
     this.showModal = false;
     this.selectedUserId = '';
     this.availableUsers = [];
   }
 
+  // assign new employee
   assignNewEmployee() {
+    // validate user selection
     if (!this.selectedUserId) {
       this.alertService.error('Please select a user');
       return;
@@ -199,8 +212,10 @@ export class EmployeesComponent implements OnInit {
       return;
     }
 
+    // send assignment request to server
     this.employeeService.assignNewEmployee(token, this.selectedUserId).subscribe({
       next: (response) => {
+        // show success message and refresh data
         const message = response?.message || 'Employee assigned successfully';
         this.alertService.success(message);
         this.closeModal();
@@ -209,6 +224,7 @@ export class EmployeesComponent implements OnInit {
       error: (error) => {
         console.error('Assign employee error:', error);
 
+        // handle authentication errors
         if (error.status === 401) {
           sessionStorage.clear();
           this.router.navigate(['/']).then(() => {
@@ -216,6 +232,7 @@ export class EmployeesComponent implements OnInit {
             this.alertService.error(message);
           });
         } else {
+          // show error message from backend
           const errorMessage = error.error?.message || 'Failed to assign employee';
           this.alertService.error(errorMessage);
         }

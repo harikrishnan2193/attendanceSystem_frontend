@@ -5,6 +5,7 @@ import Swal from 'sweetalert2';
   providedIn: 'root',
 })
 export class AlertService {
+  // shows success alert with green checkmark icon
   success(message: string, title: string = 'Success') {
     return Swal.fire({
       title,
@@ -14,6 +15,7 @@ export class AlertService {
     });
   }
 
+  // shows error alert with red X icon
   error(message: string, title: string = 'Error') {
     return Swal.fire({
       title,
@@ -23,6 +25,7 @@ export class AlertService {
     });
   }
 
+  // shows warning alert with yellow exclamation icon
   warning(message: string, title: string = 'Warning') {
     return Swal.fire({
       title,
@@ -32,6 +35,7 @@ export class AlertService {
     });
   }
 
+  // shows confirmation dialog with Yes/No buttons
   confirm(message: string, title: string = 'Confirm') {
     return Swal.fire({
       title,
@@ -43,6 +47,7 @@ export class AlertService {
     });
   }
 
+  // shows info alert with blue info icon
   info(message: string, title: string = 'Info') {
     return Swal.fire({
       title,

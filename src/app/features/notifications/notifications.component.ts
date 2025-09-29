@@ -25,11 +25,15 @@ export class NotificationsComponent implements OnInit {
 
   ngOnInit() {
     this.loadUserRole();
-    setTimeout(() => {
-      this.loadLeaves();
-    }, 100);
+    this.loadLeaves();
   }
 
+  private initializeComponent(): void {
+    this.loadUserRole();
+    this.loadLeaves();
+  }
+
+  // load current user role from session storage
   private loadUserRole(): void {
     try {
       const userDataString = sessionStorage.getItem('user');
@@ -42,6 +46,7 @@ export class NotificationsComponent implements OnInit {
     }
   }
 
+  // load leave requests from server
   private loadLeaves(): void {
     const token = sessionStorage.getItem('token');
     if (!token) {
@@ -67,6 +72,7 @@ export class NotificationsComponent implements OnInit {
     });
   }
 
+  // update leave request status (approve/reject)
   updateLeaveStatus(request: any, newStatus: string): void {
     const token = sessionStorage.getItem('token');
     if (!token) {
@@ -88,6 +94,7 @@ export class NotificationsComponent implements OnInit {
     });
   }
 
+  // convert leave data to notification format
   private convertLeavesToNotifications(leaves: any[]): any[] {
     return leaves.map((leave, index) => ({
       id: leave.user_id + index,
@@ -98,10 +105,12 @@ export class NotificationsComponent implements OnInit {
     }));
   }
 
+  // get filtered leave requests by selected status
   get filteredLeaveRequests() {
     return this.leaveRequests.filter((request) => request.status === this.selectedStatus);
   }
 
+  // track function for ngFor performance
   trackByFn(index: number, item: any): any {
     return item.id || item.user_id || index;
   }

@@ -11,6 +11,7 @@ export class LeaveService {
 
   constructor(private http: HttpClient) {}
 
+  // submit new leave request
   submitLeave(token: string, leaveData: any): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${token}`,
@@ -20,6 +21,7 @@ export class LeaveService {
     return this.http.post(`${this.baseUrl}/api/leaves/submit`, leaveData, { headers });
   }
 
+  // get all leave requests
   getLeaves(token: string): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${token}`,
@@ -28,6 +30,7 @@ export class LeaveService {
     return this.http.get(`${this.baseUrl}/api/leaves/getleaves`, { headers });
   }
 
+  // update leave request status (approve/reject)
   updateLeaveStatus(token: string, leaveId: number, status: string): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${token}`,

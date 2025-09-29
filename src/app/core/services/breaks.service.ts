@@ -11,6 +11,7 @@ export class BreaksService {
 
   constructor(private http: HttpClient) {}
 
+  // gets current break status (active/inactive) for user
   getCurrentBreakStatus(token: string): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${token}`,
@@ -20,6 +21,7 @@ export class BreaksService {
     return this.http.get(`${this.baseUrl}/api/breaks/status`, { headers });
   }
 
+  // starts a new break session for user
   startBreak(token: string): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${token}`,
@@ -29,6 +31,7 @@ export class BreaksService {
     return this.http.post(`${this.baseUrl}/api/breaks/start`, {}, { headers });
   }
 
+  // ends current break session for user
   endBreak(token: string): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${token}`,

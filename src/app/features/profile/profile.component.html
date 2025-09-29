@@ -1,0 +1,106 @@
+<div class="profile-container">
+  <div class="profile-card">
+    <div class="profile-header">
+      <div class="icon-wrapper">
+        <i class="fa-solid fa-user-circle"></i>
+      </div>
+      <h2 class="title">User Profile</h2>
+      <p class="subtitle">Manage your account settings</p>
+    </div>
+
+    <!-- current user info -->
+    <div class="user-info-section">
+      <h3 class="section-title">
+        <i class="fa-solid fa-id-card"></i>
+        Current Information
+      </h3>
+      <div class="info-cards">
+        <div class="info-card">
+          <div class="info-icon">
+            <i class="fa-solid fa-user"></i>
+          </div>
+          <div class="info-content">
+            <span class="info-label">Name</span>
+            <span class="info-value">{{ currentUser.name }}</span>
+          </div>
+        </div>
+        <div class="info-card">
+          <div class="info-icon">
+            <i class="fa-solid fa-envelope"></i>
+          </div>
+          <div class="info-content">
+            <span class="info-label">Email</span>
+            <span class="info-value">{{ currentUser.email }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- change password form -->
+    <form class="profile-form" (ngSubmit)="changePassword()" novalidate>
+      <h3 class="section-title">Change Password</h3>
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="currentPassword" class="form-label">
+            <i class="fa-solid fa-lock"></i>
+            Current Password
+          </label>
+          <input
+            type="password"
+            class="form-input"
+            id="currentPassword"
+            placeholder="Enter current password"
+            [(ngModel)]="passwordForm.currentPassword"
+            name="currentPassword"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="newPassword" class="form-label">
+            <i class="fa-solid fa-key"></i>
+            New Password
+          </label>
+          <input
+            type="password"
+            class="form-input"
+            id="newPassword"
+            placeholder="Enter new password"
+            [(ngModel)]="passwordForm.newPassword"
+            name="newPassword"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="confirmPassword" class="form-label">
+            <i class="fa-solid fa-lock-open"></i>
+            Confirm New Password
+          </label>
+          <input
+            type="password"
+            class="form-input"
+            id="confirmPassword"
+            placeholder="Confirm new password"
+            [(ngModel)]="passwordForm.confirmPassword"
+            name="confirmPassword"
+            required
+          />
+        </div>
+      </div>
+      <button type="submit" class="submit-btn" [disabled]="isPasswordLoading">
+        @if (isPasswordLoading) {
+        <div class="loading-content">
+          <div class="spinner"></div>
+          Changing Password...
+        </div>
+        } @else {
+        <div class="button-content">
+          <i class="fa-solid fa-key"></i>
+          Change Password
+        </div>
+        }
+      </button>
+    </form>
+  </div>
+</div>

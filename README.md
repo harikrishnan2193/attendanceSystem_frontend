@@ -1,39 +1,36 @@
-
 ---
-
 # Attendance Management System
 
-A comprehensive **web-based attendance management system** built with **Angular 18+** and modern web technologies. This application provides **role-based access control** for employees and administrators to efficiently manage attendance, leave requests, and notifications.
-
+A comprehensive **web-based attendance management system** built with **Angular 18+** and modern web technologies. This application provides **role-based access control** with **OAuth integration** for employees and administrators to efficiently manage attendance, leave requests, and notifications.
 ---
 
 ## Features
 
 ### For Employees
 
-* Real-time attendance tracking (check-in/check-out with live timer)
-* Break management (start & end breaks during work hours)
-* Submit leave requests with date range and reason
-* Notifications for leave request status (approved/rejected/pending)
-* View personal attendance history
+- Real-time attendance tracking (check-in/check-out with live timer)
+- Break management (start & end breaks during work hours)
+- Submit leave requests with date range and reason
+- Notifications for leave request status (approved/rejected/pending)
+- View personal attendance history
 
 ### For Administrators
 
-* Manage employee accounts
-* Approve/reject leave requests
-* Monitor overall employee attendance
-* Dashboard with real-time statistics & insights
+- Manage employee accounts
+- Approve/reject leave requests
+- Monitor overall employee attendance
+- Dashboard with real-time statistics & insights
 
 ---
 
 ## Technology Stack
 
-* Frontend: Angular 18+ (Standalone Components)
-* Language: TypeScript
-* Styling: Bootstrap 5 + Custom CSS
-* Notifications: SweetAlert2
-* Authentication: JWT (Token-based)
-* HTTP Client: Angular HttpClient + RxJS
+- Frontend: Angular 18+ (Standalone Components)
+- Language: TypeScript
+- Styling: Bootstrap 5 + Custom CSS
+- Notifications: SweetAlert2
+- Authentication: JWT (Token-based)
+- HTTP Client: Angular HttpClient + RxJS
 
 ---
 
@@ -42,29 +39,46 @@ A comprehensive **web-based attendance management system** built with **Angular 
 ```
 src/app/
 ├── core/
-│ ├── guards/ # Route guards (auth, admin, login)
-│ ├── interceptors/ # HTTP interceptors (loading, auth)
-│ └── services/ # Application services
+│   ├── guards/
+│   │   └── auth.guard.ts # Authentication guard
+│   ├── interceptors/
+│   │   └── loading.interceptor.ts # HTTP loading interceptor
+│   └── services/ # Application services
+│       ├── alert.service.ts
+│       ├── attendance.service.ts
+│       ├── auth.service.ts
+│       ├── breaks.service.ts
+│       ├── employee.service.ts
+│       ├── leave.service.ts
+│       ├── loading.service.ts
+│       ├── oauth.service.ts
+│       └── profile.service.ts
 ├── features/
-│ ├── auth/ # Login & registration
-│ ├── dashboard/ # Main dashboard & attendance tracking
-│ ├── attendance/ # Attendance history
-│ ├── leaves/ # Leave management
-│ ├── employees/ # Employee management (Admin only)
-│ └── notifications/ # Notification system
+│   ├── auth/ # Login component
+│   ├── register/ # Registration component
+│   ├── dashboard/ # Main dashboard & attendance tracking
+│   ├── attendance/ # Attendance history
+│   ├── leaves/ # Leave management
+│   ├── employees/ # Employee management (Admin only)
+│   ├── notifications/ # Notification system
+│   └── profile/ # User profile management
 ├── layout/
-│ ├── header/ # Top navigation bar
-│ ├── sidebar/ # Sidebar navigation
-│ └── layout/ # Layout wrapper
-├── docs/
-│ └── screenshots/ # Screenshots & demo images
-│ ├── dashboard.png
-│ ├── leave-management.png
-│ ├── attendance-history.png
-│ └── mobile-view.png
-└── shared/
-└── components/ # Reusable components (loading, 404 page, etc.)
-└── loading/ # Global loading indicator
+│   ├── header/ # Top navigation bar
+│   ├── sidebar/ # Sidebar navigation
+│   ├── layout.component.ts # Main layout wrapper
+│   ├── layout.component.html
+│   └── layout.component.css
+├── shared/
+│   └── components/ # Reusable components
+│       ├── loading/ # Global loading indicator
+│       └── page-not-found/ # 404 error page
+├── environments/
+│   └── environment.ts # Environment configuration
+├── app.config.ts # Application configuration
+├── app.routes.ts # Route definitions
+├── app.ts # Root component
+├── app.html # Root template
+└── app.css # Global styles
 ```
 
 ---
@@ -73,9 +87,9 @@ src/app/
 
 ### Prerequisites
 
-* Node.js (v18+)
-* npm or yarn
-* Angular CLI (`npm install -g @angular/cli`)
+- Node.js (v18+)
+- npm or yarn
+- Angular CLI (`npm install -g @angular/cli`)
 
 ### Installation
 
@@ -94,8 +108,8 @@ npm install
 
 3. Configure environment:
 
-* Update API endpoints in `src/environments/environment.ts`
-* Set backend API URL and other environment variables
+- Update API endpoints in `src/environments/environment.ts`
+- Set backend API URL and other environment variables
 
 4. Run the application:
 
@@ -115,51 +129,51 @@ ng build --prod
 
 ## Authentication & Authorization
 
-* Public Routes → Login & Registration
-* Protected Routes → Dashboard & Features (requires login)
-* Admin Routes → Employee management & leave approvals
+- Public Routes → Login & Registration
+- Protected Routes → Dashboard & Features (requires login)
+- Admin Routes → Employee management & leave approvals
 
 ### User Roles
 
-* EMPLOYEE → Attendance & leave features
-* ADMIN → Full access (employees, approvals, analytics)
+- EMPLOYEE → Attendance & leave features
+- ADMIN → Full access (employees, approvals, analytics)
 
 ---
 
 ## Responsive Design
 
-* Desktop → Full features with sidebar navigation
-* Tablet → Adaptive layout with collapsible sidebar
-* Mobile → Touch-friendly, mobile-optimized UI
+- Desktop → Full features with sidebar navigation
+- Tablet → Adaptive layout with collapsible sidebar
+- Mobile → Touch-friendly, mobile-optimized UI
 
 ---
 
 ## UI/UX Highlights
 
-* Modern, clean design with smooth animations
-* Interactive elements (hover effects, loading states)
-* Accessibility support (ARIA labels, keyboard navigation)
-* Consistent color scheme and typography
+- Modern, clean design with smooth animations
+- Interactive elements (hover effects, loading states)
+- Accessibility support (ARIA labels, keyboard navigation)
+- Consistent color scheme and typography
 
 ---
 
 ## API Endpoints (Sample)
 
-* POST /api/auth/login → User login
-* GET /api/attendance/status → Current attendance status
-* POST /api/attendance/checkin → Check-in
-* POST /api/attendance/checkout → Check-out
-* GET /api/leaves/getleaves → Fetch leave requests
-* PUT /api/leaves/update-status → Approve/reject leave
+- POST /api/auth/login → User login
+- GET /api/attendance/status → Current attendance status
+- POST /api/attendance/checkin → Check-in
+- POST /api/attendance/checkout → Check-out
+- GET /api/leaves/getleaves → Fetch leave requests
+- PUT /api/leaves/update-status → Approve/reject leave
 
 ---
 
 ## Performance Optimizations
 
-* Lazy Loading → Load feature modules on demand
-* OnPush Change Detection → Efficient component updates
-* Standalone Components → Smaller bundle size
-* Tree Shaking → Remove unused code
+- Lazy Loading → Load feature modules on demand
+- OnPush Change Detection → Efficient component updates
+- Standalone Components → Smaller bundle size
+- Tree Shaking → Remove unused code
 
 ---
 
@@ -175,10 +189,10 @@ ng build --prod
 
 ## Version History
 
-* v1.0.0 → Initial release (core attendance features)
-* v1.1.0 → Leave management system
-* v1.2.0 → Notifications & admin features
-* v1.3.0 → Improved UI/UX with responsive design
+- v1.0.0 → Initial release (core attendance features)
+- v1.1.0 → Leave management system
+- v1.2.0 → Notifications & admin features
+- v1.3.0 → Improved UI/UX with responsive design
 
 ---
 

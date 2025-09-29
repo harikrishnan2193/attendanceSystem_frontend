@@ -7,15 +7,14 @@ import { Router } from '@angular/router';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './page-not-found.component.html',
-  styleUrls: ['./page-not-found.component.css']
+  styleUrls: ['./page-not-found.component.css'],
 })
 export class PageNotFoundComponent {
-
   constructor(private router: Router) {}
 
   navigateToHome(): void {
     const token = sessionStorage.getItem('token');
-    
+
     if (token) {
       this.router.navigate(['/home/dashboard']);
     } else {

@@ -58,12 +58,14 @@ export class AttendanceComponent implements OnInit {
     this.loadPage(1);
   }
 
+  // check if current user is admin
   checkUserRole() {
     const userStr = sessionStorage.getItem('user');
     const user = userStr ? JSON.parse(userStr) : null;
     this.isAdmin = user?.role === 'ADMIN';
   }
 
+  // build filter object for API request
   buildFilters() {
     const filters: any = {};
     if (this.filterType && this.filterType !== 'all') {
@@ -89,18 +91,19 @@ export class AttendanceComponent implements OnInit {
     return filters;
   }
 
-  // when a filter value changes
+  // handle filter changes and reload data
   onFilterChange() {
     this.currentPage = 1;
-    this.allLoadedRecords = []; // clear cache when filters change
+    this.allLoadedRecords = []; // clear cache data
     this.loadPage(1);
   }
 
+  // handle search input changes
   onSearchInput() {
-    // simple immediate search; for production add debounce
     this.onFilterChange();
   }
 
+  // load attendance data for specific page
   loadPage(page: number) {
     const token = sessionStorage.getItem('token');
     const userStr = sessionStorage.getItem('user');
@@ -128,7 +131,6 @@ export class AttendanceComponent implements OnInit {
           }
 
           // show the current page records
-          // If prefer to keep only page data use: this.attendanceHistory = newRecords;
           this.currentPage = page;
           this.attendanceHistory = this.getCurrentPageRecords();
           this.totalRecords = response?.pagination?.totalRecords || 0;
@@ -151,12 +153,14 @@ export class AttendanceComponent implements OnInit {
       });
   }
 
+  // get records for current page from loaded data
   getCurrentPageRecords() {
     const startIndex = (this.currentPage - 1) * this.recordsPerPage;
     const endIndex = startIndex + this.recordsPerPage;
     return this.allLoadedRecords.slice(startIndex, endIndex);
   }
 
+  // navigate to next page
   nextPage() {
     const maxLoadedPage = Math.ceil(this.allLoadedRecords.length / this.recordsPerPage);
 
@@ -174,6 +178,7 @@ export class AttendanceComponent implements OnInit {
     }
   }
 
+  // navigate to previous page
   previousPage() {
     if (this.currentPage > 1) {
       this.currentPage--;
@@ -183,6 +188,7 @@ export class AttendanceComponent implements OnInit {
     }
   }
 
+  // update hasMore flag based on current state
   updateHasMore() {
     const maxLoadedPage = Math.ceil(this.allLoadedRecords.length / this.recordsPerPage);
     const totalPages = Math.ceil(this.totalRecords / this.recordsPerPage);
@@ -191,12 +197,13 @@ export class AttendanceComponent implements OnInit {
     this.cdr.detectChanges();
   }
 
-  // --- existing helpers (formatTime, formatDate, formatTimeSpent, modals) ---
+  // format time string for display
   formatTime(timeString: string | null): string {
     if (!timeString) return '—';
     return timeString;
   }
 
+  // format date string for display
   formatDate(dateString: string): string {
     if (!dateString) return '—';
     const date = new Date(dateString);
@@ -208,6 +215,7 @@ export class AttendanceComponent implements OnInit {
     });
   }
 
+  // format time spent in hours and minutes
   formatTimeSpent(timeSpent: string): string {
     if (!timeSpent || timeSpent === '0.00') return '0h 0m';
     const hours = parseFloat(timeSpent);
@@ -216,28 +224,33 @@ export class AttendanceComponent implements OnInit {
     return `${wholeHours}h ${minutes}m`;
   }
 
+  // show leave details preview modal
   showLeavePreview(record: any) {
     this.selectedLeave = record;
     this.showPreview = true;
   }
 
+  // close leave preview modal
   closePreview() {
     this.showPreview = false;
     this.selectedLeave = null;
   }
 
+  // show breaks details modal
   showBreaksPreview(record: any) {
     this.selectedRecord = record;
     this.currentBreakPage = 0;
     this.showBreaksModal = true;
   }
 
+  // close breaks preview modal
   closeBreaksPreview() {
     this.showBreaksModal = false;
     this.selectedRecord = null;
     this.currentBreakPage = 0;
   }
 
+  // get paginated breaks for current page
   getPaginatedBreaks() {
     if (!this.selectedRecord?.breaks) return [];
     const start = this.currentBreakPage * this.breaksPerPage;
@@ -245,15 +258,18 @@ export class AttendanceComponent implements OnInit {
     return this.selectedRecord.breaks.slice(start, end);
   }
 
+  // get total number of break pages
   getTotalBreakPages() {
     if (!this.selectedRecord?.breaks) return 0;
     return Math.ceil(this.selectedRecord.breaks.length / this.breaksPerPage);
   }
 
+  // navigate to next break page
   nextBreakPage() {
     if (this.currentBreakPage < this.getTotalBreakPages() - 1) this.currentBreakPage++;
   }
 
+  // navigate to previous break page
   previousBreakPage() {
     if (this.currentBreakPage > 0) this.currentBreakPage--;
   }

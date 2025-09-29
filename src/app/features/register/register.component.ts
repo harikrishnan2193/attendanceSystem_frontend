@@ -30,7 +30,7 @@ export class RegisterComponent {
     private cdr: ChangeDetectorRef
   ) {}
 
-  // register function (entry point)
+  // register function
   registerUser() {
     if (!this.validateForm()) {
       return;

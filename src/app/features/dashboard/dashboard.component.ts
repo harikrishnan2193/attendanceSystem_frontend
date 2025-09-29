@@ -33,6 +33,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.checkBreakStatus();
   }
 
+  // get current user status
   checkAttendanceStatus() {
     this.stopTimer();
     const token = sessionStorage.getItem('token');
@@ -81,6 +82,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     });
   }
 
+  // get current break status
   checkBreakStatus() {
     const token = sessionStorage.getItem('token');
     if (!token) {
@@ -99,6 +101,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     });
   }
 
+  // checkIn and checkout button
   onCheckInOut() {
     const token = sessionStorage.getItem('token');
     const userStr = sessionStorage.getItem('user');
@@ -120,6 +123,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     }
   }
 
+  // break status
   onBreakAction() {
     const token = sessionStorage.getItem('token');
     if (!token) {
@@ -134,6 +138,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     }
   }
 
+  // handle user check-in process
   private checkIn(token: string, userId: string) {
     this.attendanceService.checkIn(token, userId).subscribe({
       next: (response) => {
@@ -152,6 +157,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     });
   }
 
+  // handle user check-out process
   private checkOut(token: string, userId: string) {
     this.attendanceService.checkOut(token, userId).subscribe({
       next: (response) => {
@@ -172,6 +178,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     });
   }
 
+  // start break for user
   private startBreak(token: string) {
     this.breaksService.startBreak(token).subscribe({
       next: (response) => {
@@ -191,6 +198,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     });
   }
 
+  // end break for user
   private endBreak(token: string) {
     this.breaksService.endBreak(token).subscribe({
       next: (response) => {
@@ -209,6 +217,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     });
   }
 
+  // start timer for attendance tracking
   private startTimer() {
     if (this.timerInterval) {
       clearInterval(this.timerInterval);
@@ -219,6 +228,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     }, 1000);
   }
 
+  // update timer display every second
   private updateTimerDisplay() {
     if (this.startTime) {
       const now = new Date();
@@ -228,6 +238,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     }
   }
 
+  // stop timer and clear interval
   private stopTimer() {
     if (this.timerInterval) {
       clearInterval(this.timerInterval);
@@ -235,6 +246,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     }
   }
 
+  // format milliseconds to HH:MM:SS format
   private formatTime(milliseconds: number): string {
     const totalSeconds = Math.floor(milliseconds / 1000);
     const hours = Math.floor(totalSeconds / 3600);
@@ -246,6 +258,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       .padStart(2, '0')}`;
   }
 
+  // convert decimal hours to HH:MM:SS format
   private convertHoursToTime(totalHours: string | number): string {
     const hours = parseFloat(totalHours.toString());
     const wholeHours = Math.floor(hours);
@@ -257,6 +270,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       .padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
   }
 
+  // handle account deletion scenario
   private handleAccountDeletion(message: string) {
     this.stopTimer();
     this.attendanceStatus = 'checked_out';
@@ -267,6 +281,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     });
   }
 
+  // cleanup resources when component is destroyed
   ngOnDestroy() {
     this.stopTimer();
   }

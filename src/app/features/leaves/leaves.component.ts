@@ -26,6 +26,7 @@ export class LeavesComponent {
     private cdr: ChangeDetectorRef
   ) {}
 
+  // handle leave request submission
   onSubmitLeave() {
     const token = sessionStorage.getItem('token');
     const userStr = sessionStorage.getItem('user');
@@ -49,7 +50,6 @@ export class LeavesComponent {
       endDate: this.leaveData.endDate,
       reason: this.leaveData.reason.trim(),
     };
-    console.log(leavePayload);
 
     this.leaveService.submitLeave(token, leavePayload).subscribe({
       next: (response) => {
@@ -66,6 +66,7 @@ export class LeavesComponent {
     });
   }
 
+  // reset leave form to initial state
   private resetForm() {
     this.leaveData = {
       startDate: '',

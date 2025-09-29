@@ -55,6 +55,7 @@ export class OAuthService {
     return this.initPromise;
   }
 
+  // sighn in with google
   async signInWithGoogle(): Promise<void> {
     try {
       if (!this.isGoogleLoaded) {

@@ -55,7 +55,7 @@
     </div>
 
     <div class="analytic-card">
-      <h4>Leaves</h4>
+      <h4>Leaves In The Table</h4>
       <p>{{ analytics.totalLeaves }}</p>
     </div>
   </div>
@@ -85,6 +85,7 @@
   <!-- attendance card -->
   <div class="att-card">
     <ng-container *ngIf="attendanceHistory && attendanceHistory.length > 0; else empty">
+      <!-- desktop table -->
       <table class="attendance-table">
         <thead>
           <tr>
@@ -140,11 +141,74 @@
         </tbody>
       </table>
 
+      <!-- mobile cards -->
+      <div class="mobile-cards">
+        <div
+          *ngFor="let record of attendanceHistory"
+          class="attendance-card"
+          [class.leave-card]="record.status === 'Leave'"
+        >
+          <div *ngIf="isAdmin" class="card-row">
+            <span class="card-label">Employee</span>
+            <div class="card-value card-value-employee">
+              <div class="employee-name">{{ record.name }}</div>
+              <div class="employee-email">{{ record.email }}</div>
+            </div>
+          </div>
+          <div class="card-row">
+            <span class="card-label">Date</span>
+            <span class="card-value">{{ formatDate(record.date) }}</span>
+          </div>
+          <div class="card-row">
+            <span class="card-label">Check-in</span>
+            <span class="card-value">{{ formatTime(record.checkIn) }}</span>
+          </div>
+          <div class="card-row">
+            <span class="card-label">Check-out</span>
+            <span class="card-value">{{ formatTime(record.checkOut) }}</span>
+          </div>
+          <div class="card-row">
+            <span class="card-label">Time Spent</span>
+            <span class="card-value">{{ formatTimeSpent(record.timeSpent) }}</span>
+          </div>
+          <div class="card-row">
+            <span class="card-label">Overtime</span>
+            <span class="card-value">{{ formatTimeSpent(record.overtime) }}</span>
+          </div>
+          <div class="card-row">
+            <span class="card-label">Status</span>
+            <span [ngClass]="record.status === 'Present' ? 'badge-present' : 'badge-leave'">
+              {{ record.status }}
+            </span>
+          </div>
+          <div class="card-row">
+            <span class="card-label">Actions</span>
+            <div class="card-value">
+              <button
+                *ngIf="record.status === 'Leave'"
+                class="leave-btn"
+                (click)="showLeavePreview(record)"
+              >
+                Preview
+              </button>
+              <button
+                *ngIf="record.status !== 'Leave' && record.breaks?.length"
+                class="leave-btn"
+                (click)="showBreaksPreview(record)"
+              >
+                View Breaks
+              </button>
+              <span *ngIf="record.status !== 'Leave' && !record.breaks?.length">—</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <!-- pagination controls -->
       <div class="pagination-wrapper">
         <div class="pagination-controls">
           <button class="pagination-btn" (click)="previousPage()" [disabled]="currentPage === 1">
-            &lt; Previous
+            < Previous
           </button>
           <span class="pagination-info"
             >Page {{ currentPage }} | Total: {{ totalRecords }} records</span
@@ -160,7 +224,7 @@
       <div class="empty-state">
         <div class="empty-icon">📅</div>
         <h3>No Attendance Records</h3>
-        <p>You don't have any attendance history yet. Start by checking in to work!</p>
+        <p>No records found at the moment!</p>
       </div>
     </ng-template>
   </div>

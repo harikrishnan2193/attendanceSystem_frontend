@@ -11,6 +11,7 @@ export class EmployeeService {
 
   constructor(private http: HttpClient) {}
 
+  // fetches all employees managed by admin user
   getAllEmployees(token: string, userId: string): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${token}`,
@@ -20,6 +21,7 @@ export class EmployeeService {
     return this.http.get(`${this.baseUrl}/api/employees/all/${userId}`, { headers });
   }
 
+  // removes employee from system
   deleteEmployee(token: string, employeeId: string): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${token}`,
@@ -29,6 +31,7 @@ export class EmployeeService {
     return this.http.delete(`${this.baseUrl}/api/employees/${employeeId}`, { headers });
   }
 
+  // gets users available to be assigned as employees
   getAvailableUsers(token: string, userId: string): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${token}`,
@@ -38,6 +41,7 @@ export class EmployeeService {
     return this.http.get(`${this.baseUrl}/api/users/available/${userId}`, { headers });
   }
 
+  // assigns user as new employee
   assignNewEmployee(token: string, employeeUserId: string): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${token}`,
