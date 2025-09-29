@@ -10,28 +10,14 @@
 
     <!-- current user info -->
     <div class="user-info-section">
-      <h3 class="section-title">
-        <i class="fa-solid fa-id-card"></i>
-        Current Information
-      </h3>
-      <div class="info-cards">
-        <div class="info-card">
-          <div class="info-icon">
-            <i class="fa-solid fa-user"></i>
-          </div>
-          <div class="info-content">
-            <span class="info-label">Name</span>
-            <span class="info-value">{{ currentUser.name }}</span>
-          </div>
+      <div class="user-profile-header">
+        <div class="user-avatar">
+          <i class="fa-solid fa-user-circle"></i>
         </div>
-        <div class="info-card">
-          <div class="info-icon">
-            <i class="fa-solid fa-envelope"></i>
-          </div>
-          <div class="info-content">
-            <span class="info-label">Email</span>
-            <span class="info-value">{{ currentUser.email }}</span>
-          </div>
+        <div class="user-details">
+          <h3 class="user-name">{{ currentUser.name }}</h3>
+          <p class="user-email">{{ currentUser.email }}</p>
+          <span class="user-status">Active Member</span>
         </div>
       </div>
     </div>
